@@ -20,5 +20,5 @@ private:
   bool is_rhd = false;
   float dm_fade_state = 1.0;
   QPixmap dm_img;
-  std::vector<vec3> face_kpts_draw;
+  std::vector<std::vector<vec3>> face_kpts_draw;
 };

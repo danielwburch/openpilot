@@ -5,18 +5,29 @@ from openpilot.selfdrive.ui.ui_state import ui_state, UI_BORDER_SIZE
 from openpilot.system.ui.lib.application import gui_app
 from openpilot.system.ui.widgets import Widget
 
-# Default 3D coordinates for face keypoints as a NumPy array
-DEFAULT_FACE_KPTS_3D = np.array([
-  [-5.98, -51.20, 8.00], [-17.64, -49.14, 8.00], [-23.81, -46.40, 8.00], [-29.98, -40.91, 8.00],
-  [-32.04, -37.49, 8.00], [-34.10, -32.00, 8.00], [-36.16, -21.03, 8.00], [-36.16, 6.40, 8.00],
-  [-35.47, 10.51, 8.00], [-32.73, 19.43, 8.00], [-29.30, 26.29, 8.00], [-24.50, 33.83, 8.00],
-  [-19.01, 41.37, 8.00], [-14.21, 46.17, 8.00], [-12.16, 47.54, 8.00], [-4.61, 49.60, 8.00],
-  [4.99, 49.60, 8.00], [12.53, 47.54, 8.00], [14.59, 46.17, 8.00], [19.39, 41.37, 8.00],
-  [24.87, 33.83, 8.00], [29.67, 26.29, 8.00], [33.10, 19.43, 8.00], [35.84, 10.51, 8.00],
-  [36.53, 6.40, 8.00], [36.53, -21.03, 8.00], [34.47, -32.00, 8.00], [32.42, -37.49, 8.00],
-  [30.36, -40.91, 8.00], [24.19, -46.40, 8.00], [18.02, -49.14, 8.00], [6.36, -51.20, 8.00],
-  [-5.98, -51.20, 8.00],
-], dtype=np.float32)
+# 3D keypoints for the middle finger outline, as separate strokes:
+# folded index finger, folded ring finger, hand body, raised middle finger.
+# Traced from Tabler Icons "hand-middle-finger" (MIT) and scaled to the frame the face outline used.
+DEFAULT_FACE_STROKES_3D = [np.array(s, dtype=np.float32) for s in (
+  [[-17.50, 5.00, 8.00], [-17.50, 0.64, 8.00], [-17.50, -3.71, 8.00], [-17.48, -8.07, 8.00], [-15.94, -12.08, 8.00],
+   [-12.45, -14.59, 8.00], [-8.16, -14.77, 8.00], [-4.47, -12.57, 8.00], [-2.60, -8.71, 8.00], [-2.50, -4.36, 8.00],
+   [-2.50, 0.00, 8.00]],
+  [[12.50, -7.50, 8.00], [13.48, -11.21, 8.00], [16.17, -13.95, 8.00], [19.87, -15.00, 8.00], [23.60, -14.08, 8.00],
+   [26.38, -11.44, 8.00], [27.50, -7.77, 8.00], [27.50, -3.88, 8.00], [27.50, 0.00, 8.00]],
+  [[27.50, -2.50, 8.00], [29.15, -7.20, 8.00], [33.38, -9.82, 8.00], [38.33, -9.22, 8.00], [41.80, -5.66, 8.00],
+   [42.50, -0.68, 8.00], [42.50, 4.39, 8.00], [42.50, 9.47, 8.00], [42.50, 14.55, 8.00], [42.50, 19.62, 8.00],
+   [42.13, 24.68, 8.00], [40.92, 29.60, 8.00], [38.90, 34.25, 8.00], [36.12, 38.49, 8.00], [32.67, 42.21, 8.00],
+   [28.64, 45.29, 8.00], [24.16, 47.64, 8.00], [19.34, 49.21, 8.00], [14.32, 49.94, 8.00], [9.24, 50.00, 8.00],
+   [4.17, 50.00, 8.00], [1.17, 49.91, 8.00], [-3.83, 49.08, 8.00], [-8.62, 47.43, 8.00], [-13.06, 44.99, 8.00],
+   [-17.04, 41.84, 8.00], [-20.42, 38.06, 8.00], [-22.71, 34.66, 8.00], [-23.86, 32.78, 8.00], [-25.56, 29.88, 8.00],
+   [-27.82, 25.97, 8.00], [-30.64, 21.04, 8.00], [-34.00, 15.10, 8.00], [-37.93, 8.14, 8.00], [-39.89, 2.64, 8.00],
+   [-38.21, -2.05, 8.00], [-34.00, -4.73, 8.00], [-28.98, -4.75, 8.00], [-24.68, -2.18, 8.00], [-21.09, 1.41, 8.00],
+   [-17.50, 5.00, 8.00]],
+  [[-2.50, -2.50, 8.00], [-2.50, -9.13, 8.00], [-2.50, -15.76, 8.00], [-2.50, -22.39, 8.00], [-2.50, -29.02, 8.00],
+   [-2.50, -35.64, 8.00], [-2.50, -42.27, 8.00], [0.07, -48.15, 8.00], [6.24, -49.90, 8.00], [11.51, -46.23, 8.00],
+   [12.50, -39.77, 8.00], [12.50, -33.14, 8.00], [12.50, -26.52, 8.00], [12.50, -19.89, 8.00], [12.50, -13.26, 8.00],
+   [12.50, -6.63, 8.00], [12.50, 0.00, 8.00]],
+)]
 
 # UI constants
 BTN_SIZE = 192
@@ -46,7 +57,7 @@ class DriverStateRenderer(Widget):
   def __init__(self):
     super().__init__()
     # Initial state with NumPy arrays
-    self.face_kpts_draw = DEFAULT_FACE_KPTS_3D.copy()
+    self.face_kpts_draw = [s.copy() for s in DEFAULT_FACE_STROKES_3D]
     self.is_active = False
     self.is_rhd = False
     self.dm_fade_state = 0.0
@@ -55,22 +66,22 @@ class DriverStateRenderer(Widget):
     self.driver_pose_diff = np.zeros(3, dtype=np.float32)
     self.driver_pose_sins = np.zeros(3, dtype=np.float32)
     self.driver_pose_coss = np.zeros(3, dtype=np.float32)
-    self.face_keypoints_transformed = np.zeros((DEFAULT_FACE_KPTS_3D.shape[0], 2), dtype=np.float32)
+    self.face_keypoints_transformed = [np.zeros((s.shape[0], 2), dtype=np.float32) for s in DEFAULT_FACE_STROKES_3D]
     self.position_x: float = 0.0
     self.position_y: float = 0.0
     self.h_arc_data = None
     self.v_arc_data = None
 
     # Pre-allocate drawing arrays
-    self.face_lines = [rl.Vector2(0, 0) for _ in range(len(DEFAULT_FACE_KPTS_3D))]
+    self.face_lines = [[rl.Vector2(0, 0) for _ in range(len(s))] for s in DEFAULT_FACE_STROKES_3D]
     self.h_arc_lines = [rl.Vector2(0, 0) for _ in range(ARC_POINT_COUNT)]
     self.v_arc_lines = [rl.Vector2(0, 0) for _ in range(ARC_POINT_COUNT)]
 
-    # Load the driver face icon
-    self.dm_img = gui_app.texture("icons/driver_face.png", IMG_SIZE, IMG_SIZE)
+    # Load the middle finger icon
+    self.dm_img = gui_app.texture("icons/middle_finger.png", IMG_SIZE, IMG_SIZE)
 
     # Colors
-    self.white_color = rl.Color(255, 255, 255, 255)
+    self.outline_color = rl.Color(255, 0, 0, 255)
     self.arc_color = rl.Color(26, 242, 66, 255)
     self.engaged_color = rl.Color(26, 242, 66, 255)
     self.disengaged_color = rl.Color(139, 139, 139, 255)
@@ -89,9 +100,10 @@ class DriverStateRenderer(Widget):
     icon_pos = rl.Vector2(self.position_x - self.dm_img.width // 2, self.position_y - self.dm_img.height // 2)
     rl.draw_texture_v(self.dm_img, icon_pos, rl.Color(255, 255, 255, int(255 * opacity)))
 
-    # Draw face outline
-    self.white_color.a = int(255 * opacity)
-    rl.draw_spline_linear(self.face_lines, len(self.face_lines), 5.2, self.white_color)
+    # Draw the middle finger outline, one stroke at a time
+    self.outline_color.a = int(255 * opacity)
+    for stroke in self.face_lines:
+      rl.draw_spline_linear(stroke, len(stroke), 5.2, self.outline_color)
 
     # Set arc color based on engaged state
     self.arc_color = self.engaged_color if ui_state.engaged else self.disengaged_color
@@ -150,13 +162,15 @@ class DriverStateRenderer(Widget):
       ]
     )
 
-    # Transform face keypoints using vectorized matrix multiplication
-    self.face_kpts_draw = DEFAULT_FACE_KPTS_3D @ r_xyz.T
-    self.face_kpts_draw[:, 2] = self.face_kpts_draw[:, 2] * (1.0 - self.dm_fade_state) + 8 * self.dm_fade_state
+    # Transform keypoints of every stroke using vectorized matrix multiplication
+    for i, stroke in enumerate(DEFAULT_FACE_STROKES_3D):
+      kpts = stroke @ r_xyz.T
+      kpts[:, 2] = kpts[:, 2] * (1.0 - self.dm_fade_state) + 8 * self.dm_fade_state
+      self.face_kpts_draw[i] = kpts
 
-    # Pre-calculate the transformed keypoints
-    kp_depth = (self.face_kpts_draw[:, 2] - 8) / 120.0 + 1.0
-    self.face_keypoints_transformed = self.face_kpts_draw[:, :2] * kp_depth[:, None]
+      # Pre-calculate the transformed keypoints
+      kp_depth = (kpts[:, 2] - 8) / 120.0 + 1.0
+      self.face_keypoints_transformed[i] = kpts[:, :2] * kp_depth[:, None]
 
     # Pre-calculate all drawing elements
     self._pre_calculate_drawing_elements()
@@ -169,11 +183,12 @@ class DriverStateRenderer(Widget):
     self.position_x = self._rect.x + (width - offset if self.is_rhd else offset)
     self.position_y = self._rect.y + height - offset
 
-    # Pre-calculate the face lines positions
-    positioned_keypoints = self.face_keypoints_transformed + np.array([self.position_x, self.position_y])
-    for i in range(len(positioned_keypoints)):
-      self.face_lines[i].x = positioned_keypoints[i][0]
-      self.face_lines[i].y = positioned_keypoints[i][1]
+    # Pre-calculate the outline positions for every stroke
+    for s, transformed in enumerate(self.face_keypoints_transformed):
+      positioned_keypoints = transformed + np.array([self.position_x, self.position_y])
+      for i in range(len(positioned_keypoints)):
+        self.face_lines[s][i].x = positioned_keypoints[i][0]
+        self.face_lines[s][i].y = positioned_keypoints[i][1]
 
     # Calculate arc dimensions based on head rotation
     delta_x = -self.driver_pose_sins[1] * ARC_LENGTH / 2.0  # Horizontal movement
