@@ -7,36 +7,32 @@
 
 // 3D keypoints for the middle finger outline, drawn as separate strokes:
 // folded index finger, folded ring finger, hand body, raised middle finger.
-// Traced from Tabler Icons "hand-middle-finger" (MIT) and scaled to the same frame the face outline used.
+// Traced from Tabler Icons "hand-middle-finger" (MIT), scaled to the frame the face outline used,
+// and centered on the bounding box so it sits in the middle of the circle.
 static const std::vector<std::vector<vec3>> DEFAULT_FACE_KPTS_3D = {
-  {{{-17.50, 5.00, 8.00}}, {{-17.50, 0.64, 8.00}}, {{-17.50, -3.71, 8.00}}, {{-17.48, -8.07, 8.00}}, {{-15.94, -12.08, 8.00}},
-   {{-12.45, -14.59, 8.00}}, {{-8.16, -14.77, 8.00}}, {{-4.47, -12.57, 8.00}}, {{-2.60, -8.71, 8.00}}, {{-2.50, -4.36, 8.00}},
-   {{-2.50, 0.00, 8.00}}},
-  {{{12.50, -7.50, 8.00}}, {{13.48, -11.21, 8.00}}, {{16.17, -13.95, 8.00}}, {{19.87, -15.00, 8.00}}, {{23.60, -14.08, 8.00}},
-   {{26.38, -11.44, 8.00}}, {{27.50, -7.77, 8.00}}, {{27.50, -3.88, 8.00}}, {{27.50, 0.00, 8.00}}},
-  {{{27.50, -2.50, 8.00}}, {{29.15, -7.20, 8.00}}, {{33.38, -9.82, 8.00}}, {{38.33, -9.22, 8.00}}, {{41.80, -5.66, 8.00}},
-   {{42.50, -0.68, 8.00}}, {{42.50, 4.39, 8.00}}, {{42.50, 9.47, 8.00}}, {{42.50, 14.55, 8.00}}, {{42.50, 19.62, 8.00}},
-   {{42.13, 24.68, 8.00}}, {{40.92, 29.60, 8.00}}, {{38.90, 34.25, 8.00}}, {{36.12, 38.49, 8.00}}, {{32.67, 42.21, 8.00}},
-   {{28.64, 45.29, 8.00}}, {{24.16, 47.64, 8.00}}, {{19.34, 49.21, 8.00}}, {{14.32, 49.94, 8.00}}, {{9.24, 50.00, 8.00}},
-   {{4.17, 50.00, 8.00}}, {{1.17, 49.91, 8.00}}, {{-3.83, 49.08, 8.00}}, {{-8.62, 47.43, 8.00}}, {{-13.06, 44.99, 8.00}},
-   {{-17.04, 41.84, 8.00}}, {{-20.42, 38.06, 8.00}}, {{-22.71, 34.66, 8.00}}, {{-23.86, 32.78, 8.00}}, {{-25.56, 29.88, 8.00}},
-   {{-27.82, 25.97, 8.00}}, {{-30.64, 21.04, 8.00}}, {{-34.00, 15.10, 8.00}}, {{-37.93, 8.14, 8.00}}, {{-39.89, 2.64, 8.00}},
-   {{-38.21, -2.05, 8.00}}, {{-34.00, -4.73, 8.00}}, {{-28.98, -4.75, 8.00}}, {{-24.68, -2.18, 8.00}}, {{-21.09, 1.41, 8.00}},
-   {{-17.50, 5.00, 8.00}}},
-  {{{-2.50, -2.50, 8.00}}, {{-2.50, -9.13, 8.00}}, {{-2.50, -15.76, 8.00}}, {{-2.50, -22.39, 8.00}}, {{-2.50, -29.02, 8.00}},
-   {{-2.50, -35.64, 8.00}}, {{-2.50, -42.27, 8.00}}, {{0.07, -48.15, 8.00}}, {{6.24, -49.90, 8.00}}, {{11.51, -46.23, 8.00}},
-   {{12.50, -39.77, 8.00}}, {{12.50, -33.14, 8.00}}, {{12.50, -26.52, 8.00}}, {{12.50, -19.89, 8.00}}, {{12.50, -13.26, 8.00}},
-   {{12.50, -6.63, 8.00}}, {{12.50, 0.00, 8.00}}},
+  {{{-18.80, 4.95, 8.00}}, {{-18.80, 0.59, 8.00}}, {{-18.80, -3.76, 8.00}}, {{-18.78, -8.12, 8.00}}, {{-17.24, -12.13, 8.00}},
+   {{-13.76, -14.64, 8.00}}, {{-9.47, -14.82, 8.00}}, {{-5.78, -12.62, 8.00}}, {{-3.90, -8.76, 8.00}}, {{-3.80, -4.41, 8.00}},
+   {{-3.80, -0.05, 8.00}}},
+  {{{11.20, -7.55, 8.00}}, {{12.18, -11.26, 8.00}}, {{14.87, -14.00, 8.00}}, {{18.56, -15.05, 8.00}}, {{22.29, -14.13, 8.00}},
+   {{25.08, -11.49, 8.00}}, {{26.19, -7.82, 8.00}}, {{26.20, -3.93, 8.00}}, {{26.20, -0.05, 8.00}}},
+  {{{26.20, -2.55, 8.00}}, {{27.85, -7.25, 8.00}}, {{32.08, -9.88, 8.00}}, {{37.02, -9.27, 8.00}}, {{40.50, -5.71, 8.00}},
+   {{41.20, -0.73, 8.00}}, {{41.20, 4.34, 8.00}}, {{41.20, 9.42, 8.00}}, {{41.20, 14.49, 8.00}}, {{41.20, 19.57, 8.00}},
+   {{40.83, 24.63, 8.00}}, {{39.62, 29.55, 8.00}}, {{37.60, 34.20, 8.00}}, {{34.82, 38.44, 8.00}}, {{31.37, 42.15, 8.00}},
+   {{27.34, 45.23, 8.00}}, {{22.85, 47.59, 8.00}}, {{18.03, 49.16, 8.00}}, {{13.02, 49.89, 8.00}}, {{7.94, 49.95, 8.00}},
+   {{2.86, 49.95, 8.00}}, {{-0.13, 49.86, 8.00}}, {{-5.13, 49.03, 8.00}}, {{-9.92, 47.38, 8.00}}, {{-14.37, 44.94, 8.00}},
+   {{-18.34, 41.79, 8.00}}, {{-21.72, 38.01, 8.00}}, {{-24.02, 34.61, 8.00}}, {{-25.17, 32.73, 8.00}}, {{-26.87, 29.83, 8.00}},
+   {{-29.13, 25.91, 8.00}}, {{-31.94, 20.99, 8.00}}, {{-35.31, 15.04, 8.00}}, {{-39.23, 8.09, 8.00}}, {{-41.20, 2.59, 8.00}},
+   {{-39.52, -2.10, 8.00}}, {{-35.30, -4.78, 8.00}}, {{-30.29, -4.80, 8.00}}, {{-25.98, -2.23, 8.00}}, {{-22.39, 1.36, 8.00}},
+   {{-18.80, 4.95, 8.00}}},
+  {{{-3.80, -2.55, 8.00}}, {{-3.80, -9.18, 8.00}}, {{-3.80, -15.81, 8.00}}, {{-3.80, -22.44, 8.00}}, {{-3.80, -29.07, 8.00}},
+   {{-3.80, -35.70, 8.00}}, {{-3.80, -42.33, 8.00}}, {{-1.23, -48.20, 8.00}}, {{4.94, -49.95, 8.00}}, {{10.20, -46.28, 8.00}},
+   {{11.20, -39.83, 8.00}}, {{11.20, -33.20, 8.00}}, {{11.20, -26.57, 8.00}}, {{11.20, -19.94, 8.00}}, {{11.20, -13.31, 8.00}},
+   {{11.20, -6.68, 8.00}}, {{11.20, -0.05, 8.00}}},
 };
 
-// Colors used for drawing based on monitoring state
-static const QColor DMON_ENGAGED_COLOR = QColor::fromRgbF(0.1, 0.945, 0.26);
-static const QColor DMON_DISENGAGED_COLOR = QColor::fromRgbF(0.545, 0.545, 0.545);
 static const QColor DMON_OUTLINE_COLOR = QColor::fromRgbF(1.0, 0.0, 0.0);
 
-DriverMonitorRenderer::DriverMonitorRenderer() : face_kpts_draw(DEFAULT_FACE_KPTS_3D) {
-  dm_img = loadPixmap("../assets/icons/middle_finger.png", {img_size + 5, img_size + 5});
-}
+DriverMonitorRenderer::DriverMonitorRenderer() : face_kpts_draw(DEFAULT_FACE_KPTS_3D) {}
 
 void DriverMonitorRenderer::updateState(const UIState &s) {
   auto &sm = *(s.sm);
@@ -54,7 +50,6 @@ void DriverMonitorRenderer::updateState(const UIState &s) {
 
   for (int i = 0; i < 3; ++i) {
     float v_this = (i == 0 ? (driver_orient[i] < 0 ? 0.7 : 0.9) : 0.4) * driver_orient[i];
-    driver_pose_diff[i] = std::abs(driver_pose_vals[i] - v_this);
     driver_pose_vals[i] = 0.8f * v_this + (1 - 0.8) * driver_pose_vals[i];
     driver_pose_sins[i] = std::sin(driver_pose_vals[i] * (1.0f - dm_fade_state));
     driver_pose_coss[i] = std::cos(driver_pose_vals[i] * (1.0f - dm_fade_state));
@@ -89,11 +84,16 @@ void DriverMonitorRenderer::draw(QPainter &painter, const QRect &surface_rect) {
   float y = surface_rect.height() - offset;
   float opacity = is_active ? 0.65f : 0.2f;
 
-  drawIcon(painter, QPoint(x, y), dm_img, QColor(0, 0, 0, 70), opacity);
+  // translucent backdrop circle
+  painter.setPen(Qt::NoPen);
+  painter.setBrush(QColor(0, 0, 0, 70));
+  painter.drawEllipse(QPointF(x, y), btn_size / 2.0, btn_size / 2.0);
 
+  // red middle finger outline, rotated with the driver's head
   QColor outline_color = DMON_OUTLINE_COLOR;
   outline_color.setAlphaF(opacity);
   painter.setPen(QPen(outline_color, 5.2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+  painter.setBrush(Qt::NoBrush);
   for (const auto &stroke : face_kpts_draw) {
     std::vector<QPointF> keypoints(stroke.size());
     for (size_t i = 0; i < stroke.size(); ++i) {
@@ -103,24 +103,6 @@ void DriverMonitorRenderer::draw(QPainter &painter, const QRect &surface_rect) {
     }
     painter.drawPolyline(keypoints.data(), static_cast<int>(keypoints.size()));
   }
-
-  // tracking arcs
-  const int arc_l = 133;
-  const float arc_t_default = 6.7f;
-  const float arc_t_extend = 12.0f;
-  QColor arc_color = uiState()->engaged() ? DMON_ENGAGED_COLOR : DMON_DISENGAGED_COLOR;
-  arc_color.setAlphaF(0.4 * (1.0f - dm_fade_state));
-
-  float delta_x = -driver_pose_sins[1] * arc_l / 2.0f;
-  float delta_y = -driver_pose_sins[0] * arc_l / 2.0f;
-
-  // Draw horizontal tracking arc
-  painter.setPen(QPen(arc_color, arc_t_default + arc_t_extend * std::min(1.0, driver_pose_diff[1] * 5.0), Qt::SolidLine, Qt::RoundCap));
-  painter.drawArc(QRectF(std::min(x + delta_x, x), y - arc_l / 2, std::abs(delta_x), arc_l), (driver_pose_sins[1] > 0 ? 90 : -90) * 16, 180 * 16);
-
-  // Draw vertical tracking arc
-  painter.setPen(QPen(arc_color, arc_t_default + arc_t_extend * std::min(1.0, driver_pose_diff[0] * 5.0), Qt::SolidLine, Qt::RoundCap));
-  painter.drawArc(QRectF(x - arc_l / 2, std::min(y + delta_y, y), arc_l, std::abs(delta_y)), (driver_pose_sins[0] > 0 ? 0 : 180) * 16, 180 * 16);
 
   painter.restore();
 }
